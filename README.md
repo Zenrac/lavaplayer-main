@@ -5,6 +5,7 @@ https://github.com/sedmelluq/lavaplayer
 
 It essentially only contains the main package of lavaplayer.
 
+[![](https://jitpack.io/v/GigaFyde/lavaplayer-main.svg)](https://jitpack.io/#GigaFyde/lavaplayer-main)
 
 # Changes-made/included
 
