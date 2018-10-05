@@ -12,3 +12,4 @@ It essentially only contains the main package of lavaplayer.
 - Twitch fix - provided by https://github.com/sedmelluq/lavaplayer/pull/126
 - Opus tag fix - provided by https://github.com/sedmelluq/lavaplayer/pull/131
 - built-in artwork support - provided by https://github.com/sedmelluq/lavaplayer/pull/101
+- Support for Youtube Music - provided by me at https://github.com/sedmelluq/lavaplayer/pull/134
