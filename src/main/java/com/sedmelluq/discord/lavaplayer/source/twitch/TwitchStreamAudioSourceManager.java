@@ -37,15 +37,27 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
   private static final String STREAM_NAME_REGEX = "^https://(?:www\\.|go\\.)?twitch.tv/([^/]+)$";
   private static final Pattern streamNameRegex = Pattern.compile(STREAM_NAME_REGEX);
 
-  public static final String CLIENT_ID = "jzkbprff40iqj646a697cyrvl0zt2m6";
+  public static final String DEFAULT_CLIENT_ID = "jzkbprff40iqj646a697cyrvl0zt2m6";
 
   private final HttpInterfaceManager httpInterfaceManager;
+  private final String twitchClientId;
 
   /**
    * Create an instance.
    */
-  public TwitchStreamAudioSourceManager() {
-    httpInterfaceManager = HttpClientTools.createDefaultThreadLocalManager();
+  public TwitchStreamAudioSourceManager() { this(DEFAULT_CLIENT_ID); }
+
+  /**
+   * Create an instance.
+   * @param clientId The Twitch client id for your application.
+   */
+  public TwitchStreamAudioSourceManager(String clientId) {
+      httpInterfaceManager = HttpClientTools.createDefaultThreadLocalManager();
+      twitchClientId = clientId;
+  }
+
+  public String getClientId() {
+    return twitchClientId;
   }
 
   @Override
@@ -80,7 +92,7 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
       JsonBrowser channelData = dataList.get(0);
       String status = channelData.get("title").text();
       final String thumbnail = channelData.get("thumbnail_url").text().replace("-{width}x{height}.jpg", "-1920x1080.jpg");
-      
+
 
       return new TwitchStreamAudioTrack(new AudioTrackInfo(
               status,
@@ -93,7 +105,6 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
       ), this);
     }
   }
-
 
   @Override
   public boolean isTrackEncodable(AudioTrack track) {
@@ -128,16 +139,16 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
    * @param url Request URL
    * @return Request with necessary headers attached.
    */
-  public static HttpUriRequest createGetRequest(String url) {
-    return addClientHeaders(new HttpGet(url));
+  public HttpUriRequest createGetRequest(String url) {
+    return addClientHeaders(new HttpGet(url), twitchClientId);
   }
 
   /**
    * @param url Request URL
    * @return Request with necessary headers attached.
    */
-  public static HttpUriRequest createGetRequest(URI url) {
-    return addClientHeaders(new HttpGet(url));
+  public HttpUriRequest createGetRequest(URI url) {
+    return addClientHeaders(new HttpGet(url), twitchClientId);
   }
 
   /**
@@ -157,8 +168,8 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
     httpInterfaceManager.configureBuilder(configurator);
   }
 
-  private static HttpUriRequest addClientHeaders(HttpUriRequest request) {
-    request.setHeader("Client-ID", CLIENT_ID);
+  private static HttpUriRequest addClientHeaders(HttpUriRequest request, String clientId) {
+    request.setHeader("Client-ID", clientId);
     return request;
   }
 
