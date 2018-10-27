@@ -8,8 +8,5 @@ It essentially only contains the main package of lavaplayer.
 [![](https://jitpack.io/v/GigaFyde/lavaplayer-main.svg)](https://jitpack.io/#GigaFyde/lavaplayer-main)
 
 # Changes-made/included
-
-- Twitch fix - provided by https://github.com/sedmelluq/lavaplayer/pull/132
-- Opus tag fix - provided by https://github.com/sedmelluq/lavaplayer/pull/131
+Repo is up to date as of 20/10/2018
 - built-in artwork support - provided by https://github.com/sedmelluq/lavaplayer/pull/101
-- Support for Youtube Music - provided by me at https://github.com/sedmelluq/lavaplayer/pull/134
