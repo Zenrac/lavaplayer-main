@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetection.checkNextBytes;
+import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetectionResult.supportedFormat;
+import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetectionResult.unsupportedFormat;
 
 /**
  * Container detection probe for MP4 format.
@@ -48,27 +50,27 @@ public class MpegContainerProbe implements MediaContainerProbe {
     MpegTrackInfo audioTrack = getSupportedAudioTrack(file);
 
     if (audioTrack == null) {
-      return new MediaContainerDetectionResult(this, "No supported audio format in the MP4 file.");
+      return unsupportedFormat(this, "No supported audio format in the MP4 file.");
     }
 
     MpegTrackConsumer trackConsumer = new MpegNoopTrackConsumer(audioTrack);
     MpegFileTrackProvider fileReader = file.loadReader(trackConsumer);
 
     if (fileReader == null) {
-      return new MediaContainerDetectionResult(this, "MP4 file uses an unsupported format.");
+      return unsupportedFormat(this, "MP4 file uses an unsupported format.");
     }
 
     AudioTrackInfo trackInfo = AudioTrackInfoBuilder.create(reference, inputStream)
-        .setTitle(file.getTextMetadata("Title"))
-        .setAuthor(file.getTextMetadata("Artist"))
-        .setLength(fileReader.getDuration())
-        .build();
+            .setTitle(file.getTextMetadata("Title"))
+            .setAuthor(file.getTextMetadata("Artist"))
+            .setLength(fileReader.getDuration())
+            .build();
 
-    return new MediaContainerDetectionResult(this, trackInfo);
+    return supportedFormat(this, null, trackInfo);
   }
 
   @Override
-  public AudioTrack createTrack(AudioTrackInfo trackInfo, SeekableInputStream inputStream) {
+  public AudioTrack createTrack(String parameters, AudioTrackInfo trackInfo, SeekableInputStream inputStream) {
     return new MpegAudioTrack(trackInfo, inputStream);
   }
 

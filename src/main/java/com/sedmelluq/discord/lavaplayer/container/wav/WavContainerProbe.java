@@ -15,6 +15,7 @@ import java.io.IOException;
 import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetection.UNKNOWN_ARTIST;
 import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetection.UNKNOWN_TITLE;
 import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetection.checkNextBytes;
+import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetectionResult.supportedFormat;
 import static com.sedmelluq.discord.lavaplayer.container.wav.WavFileLoader.WAV_RIFF_HEADER;
 import static com.sedmelluq.discord.lavaplayer.tools.DataFormatTools.defaultOnNull;
 
@@ -44,18 +45,18 @@ public class WavContainerProbe implements MediaContainerProbe {
 
     WavFileInfo fileInfo = new WavFileLoader(inputStream).parseHeaders();
 
-    return new MediaContainerDetectionResult(this, new AudioTrackInfo(
-        defaultOnNull(reference.title, UNKNOWN_TITLE),
-        UNKNOWN_ARTIST,
-        fileInfo.getDuration(),
-        reference.identifier,
-        false,
-        reference.identifier
+    return supportedFormat(this, null, new AudioTrackInfo(
+            defaultOnNull(reference.title, UNKNOWN_TITLE),
+            UNKNOWN_ARTIST,
+            fileInfo.getDuration(),
+            reference.identifier,
+            false,
+            reference.identifier
     ));
   }
 
   @Override
-  public AudioTrack createTrack(AudioTrackInfo trackInfo, SeekableInputStream inputStream) {
+  public AudioTrack createTrack(String parameters, AudioTrackInfo trackInfo, SeekableInputStream inputStream) {
     return new WavAudioTrack(trackInfo, inputStream);
   }
 }

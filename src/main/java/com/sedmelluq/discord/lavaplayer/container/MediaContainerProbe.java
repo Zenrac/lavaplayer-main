@@ -43,5 +43,5 @@ public interface MediaContainerProbe {
    * @param inputStream Input stream of the track file
    * @return A new audio track
    */
-  AudioTrack createTrack(AudioTrackInfo trackInfo, SeekableInputStream inputStream);
+  AudioTrack createTrack(String parameters, AudioTrackInfo trackInfo, SeekableInputStream inputStream);
 }
