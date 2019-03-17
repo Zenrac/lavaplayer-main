@@ -299,6 +299,7 @@ public class SoundCloudAudioSourceManager implements AudioSourceManager, HttpCon
     String trackId = trackInfoJson.get("id").text();
 
     JsonBrowser artworkUrl = trackInfoJson.get("artwork_url");
+    log.info(artworkUrl)
     AudioTrackInfo trackInfo = new AudioTrackInfo(
         trackInfoJson.get("title").text(),
         trackInfoJson.get("user").get("username").text(),
@@ -306,7 +307,7 @@ public class SoundCloudAudioSourceManager implements AudioSourceManager, HttpCon
         secretToken != null ? trackId + "|" + secretToken : trackId,
         false,
         trackInfoJson.get("permalink_url").text(),
-        artworkUrl != null ? artworkUrl.text().replace("large", "t500x500") : null
+        artworkUrl.text() != null ? artworkUrl.text().replace("large.", "t250x250.") : null
     );
 
     return new SoundCloudAudioTrack(trackInfo, this);
