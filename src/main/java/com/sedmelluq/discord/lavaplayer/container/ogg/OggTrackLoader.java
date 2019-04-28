@@ -1,25 +1,17 @@
 package com.sedmelluq.discord.lavaplayer.container.ogg;
 
-import com.sedmelluq.discord.lavaplayer.container.ogg.flac.OggFlacCodecHandler;
-import com.sedmelluq.discord.lavaplayer.container.ogg.opus.OggOpusCodecHandler;
-import com.sedmelluq.discord.lavaplayer.container.ogg.vorbis.OggVorbisCodecHandler;
 import com.sedmelluq.discord.lavaplayer.tools.io.DirectBufferStreamBroker;
 
 import java.io.IOException;
-import java.util.stream.Stream;
+import java.nio.ByteBuffer;
 
 /**
  * Track loader for an OGG packet stream. Automatically detects the track codec and loads the specific track handler.
  */
 public class OggTrackLoader {
-  private static final OggCodecHandler[] TRACK_PROVIDERS = new OggCodecHandler[] {
-      new OggOpusCodecHandler(),
-      new OggFlacCodecHandler(),
-      new OggVorbisCodecHandler()
-  };
-
-  private static final int MAXIMUM_FIRST_PACKET_LENGTH = Stream.of(TRACK_PROVIDERS)
-      .mapToInt(OggCodecHandler::getMaximumFirstPacketLength).max().getAsInt();
+  private static final int FLAC_IDENTIFIER = ByteBuffer.wrap(new byte[] { 0x7F, 'F', 'L', 'A' }).getInt();
+  private static final int VORBIS_IDENTIFIER = ByteBuffer.wrap(new byte[] { 0x01, 'v', 'o', 'r' }).getInt();
+  private static final int OPUS_IDENTIFIER = ByteBuffer.wrap(new byte[] { 'O', 'p', 'u', 's' }).getInt();
 
   /**
    * @param packetInputStream OGG packet input stream
@@ -27,46 +19,29 @@ public class OggTrackLoader {
    * @throws IOException On read error
    * @throws IllegalStateException If the track uses an unknown codec.
    */
-  public static OggTrackHandler loadTrackHandler(OggPacketInputStream packetInputStream) throws IOException {
-    CodecDetection result = detectCodec(packetInputStream);
-    return result != null ? result.provider.loadTrackHandler(packetInputStream, result.broker) : null;
-  }
-
-  public static OggMetadata loadMetadata(OggPacketInputStream packetInputStream) throws IOException {
-    CodecDetection result = detectCodec(packetInputStream);
-    return result != null ? result.provider.loadMetadata(packetInputStream, result.broker) : null;
-  }
-
-  private static CodecDetection detectCodec(OggPacketInputStream stream) throws IOException {
-    if (!stream.startNewTrack() || !stream.startNewPacket()) {
+  public static OggTrackProvider loadTrack(OggPacketInputStream packetInputStream) throws IOException {
+    if (!packetInputStream.startNewTrack() || !packetInputStream.startNewPacket()) {
       return null;
     }
 
     DirectBufferStreamBroker broker = new DirectBufferStreamBroker(1024);
-    int maximumLength = MAXIMUM_FIRST_PACKET_LENGTH + 1;
-
-    if (!broker.consumeNext(stream, maximumLength, maximumLength)) {
-      throw new IOException("First packet is too large for any known OGG codec.");
-    }
+    broker.consume(true, packetInputStream);
 
     int headerIdentifier = broker.getBuffer().getInt();
-
-    for (OggCodecHandler trackProvider : TRACK_PROVIDERS) {
-      if (trackProvider.isMatchingIdentifier(headerIdentifier)) {
-        return new CodecDetection(trackProvider, broker);
-      }
-    }
-
-    throw new IllegalStateException("Unsupported track in OGG stream.");
+    return chooseTrackFromIdentifier(headerIdentifier, packetInputStream, broker);
   }
 
-  private static class CodecDetection {
-    private final OggCodecHandler provider;
-    private final DirectBufferStreamBroker broker;
+  private static OggTrackProvider chooseTrackFromIdentifier(int headerIdentifier, OggPacketInputStream packetInputStream,
+                                                            DirectBufferStreamBroker broker) throws IOException {
 
-    private CodecDetection(OggCodecHandler provider, DirectBufferStreamBroker broker) {
-      this.provider = provider;
-      this.broker = broker;
+    if (headerIdentifier == FLAC_IDENTIFIER) {
+      return OggFlacTrackProviderLoader.load(packetInputStream, broker);
+    } else if (headerIdentifier == VORBIS_IDENTIFIER) {
+      return new OggVorbisTrackProvider(packetInputStream, broker);
+    } else if (headerIdentifier == OPUS_IDENTIFIER) {
+      return OggOpusTrackProviderLoader.load(packetInputStream, broker);
+    } else {
+      throw new IllegalStateException("Unsupported track in OGG stream.");
     }
   }
 }

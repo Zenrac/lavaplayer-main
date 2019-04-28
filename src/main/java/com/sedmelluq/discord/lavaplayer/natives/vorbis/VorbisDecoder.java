@@ -1,6 +1,7 @@
 package com.sedmelluq.discord.lavaplayer.natives.vorbis;
 
-import com.sedmelluq.lava.common.natives.NativeResourceHolder;
+import com.sedmelluq.discord.lavaplayer.natives.NativeResourceHolder;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -20,23 +21,36 @@ public class VorbisDecoder extends NativeResourceHolder {
   }
 
   /**
-   * Initialize the decoder by passing in identification and setup header data. See
-   * https://xiph.org/vorbis/doc/Vorbis_I_spec.html#x1-170001.2.6 for definitions. The comment header is not required as
-   * it is not actually used for decoding setup.
+   * Parse one header of a vorbis stream.
    *
-   * @param infoBuffer Identification header, including the 'vorbis' string.
-   * @param setupBuffer Setup header (also known as codebook header), including the 'vorbis' string.
+   * @param buffer Buffer containing the header
+   * @param length Length of the header in the buffer
+   * @param isBeginning Whether this is the first header
    */
-  public void initialise(ByteBuffer infoBuffer, ByteBuffer setupBuffer) {
+  public void parseHeader(ByteBuffer buffer, int length, boolean isBeginning) {
     checkNotReleased();
 
-    if (!infoBuffer.isDirect() || !setupBuffer.isDirect()) {
+    if (!buffer.isDirect()) {
       throw new IllegalArgumentException("Buffer argument must be a direct buffer.");
+    } else if (buffer.remaining() < length) {
+      throw new IllegalArgumentException("Cannot take more from buffer than available.");
     }
 
-    if (!library.initialise(instance, infoBuffer, infoBuffer.position(), infoBuffer.remaining(), setupBuffer,
-        setupBuffer.position(), setupBuffer.remaining())) {
+    int error = library.processHeader(instance, buffer, buffer.position(), length, isBeginning);
+    buffer.position(buffer.position() + length);
 
+    if (error != 0) {
+      throw new IllegalStateException("Processing header failed with error " + error + ".");
+    }
+  }
+
+  /**
+   * Initialise the decoder, headers must already be processed.
+   */
+  public void initialise() {
+    checkNotReleased();
+
+    if (!library.initialise(instance)) {
       throw new IllegalStateException("Could not initialise library.");
     }
 

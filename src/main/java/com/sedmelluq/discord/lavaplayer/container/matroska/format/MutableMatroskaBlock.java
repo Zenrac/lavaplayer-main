@@ -123,18 +123,17 @@ public class MutableMatroskaBlock implements MatroskaBlock {
     DataInput input = reader.getDataInput();
 
     for (int i = 0; i < frameCount - 1; i++) {
-      int value = 0;
+      int value;
 
       do {
-        value += input.readByte() & 0xFF;
+        value = input.readByte() & 0xFF;
+        frameSizes[i] += value;
       } while (value == 255);
 
-      frameSizes[i] = value;
-      sizeTotal += value;
+      sizeTotal += frameSizes[i];
     }
 
-    long remaining = element.getRemaining(reader.getPosition());
-    frameSizes[frameCount - 1] = (int) remaining - sizeTotal;
+    frameSizes[frameCount - 1] = (int) element.getRemaining(reader.getPosition()) - sizeTotal;
   }
 
   private void parseFixedLaceSizes(MatroskaFileReader reader, MatroskaElement element) {
