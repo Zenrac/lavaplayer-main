@@ -46,10 +46,10 @@ public class FlacContainerProbe implements MediaContainerProbe {
     FlacTrackInfo fileInfo = new FlacFileLoader(inputStream).parseHeaders();
 
     AudioTrackInfo trackInfo = AudioTrackInfoBuilder.create(reference, inputStream)
-            .setTitle(fileInfo.tags.get(TITLE_TAG))
-            .setAuthor(fileInfo.tags.get(ARTIST_TAG))
-            .setLength(fileInfo.duration)
-            .build();
+        .setTitle(fileInfo.tags.get(TITLE_TAG))
+        .setAuthor(fileInfo.tags.get(ARTIST_TAG))
+        .setLength(fileInfo.duration)
+        .build();
 
     return supportedFormat(this, null, trackInfo);
   }

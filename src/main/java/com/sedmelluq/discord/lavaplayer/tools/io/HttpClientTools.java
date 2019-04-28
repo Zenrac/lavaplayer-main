@@ -69,14 +69,14 @@ public class HttpClientTools {
   private static final SSLContext defaultSslContext = setupSslContext();
 
   public static final RequestConfig DEFAULT_REQUEST_CONFIG = RequestConfig.custom()
-          .setConnectTimeout(3000)
-          .setCookieSpec(CookieSpecs.STANDARD)
-          .build();
+      .setConnectTimeout(3000)
+      .setCookieSpec(CookieSpecs.STANDARD)
+      .build();
 
   private static final RequestConfig NO_COOKIES_REQUEST_CONFIG = RequestConfig.custom()
-          .setConnectTimeout(3000)
-          .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
-          .build();
+      .setConnectTimeout(3000)
+      .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
+      .build();
 
   /**
    * @return An HttpClientBuilder which uses the same cookie store for all clients
@@ -103,17 +103,17 @@ public class HttpClientTools {
     CookieStore cookieStore = new BasicCookieStore();
 
     return new CustomHttpClientBuilder()
-            .setDefaultCookieStore(cookieStore)
-            .setRetryHandler(NoResponseRetryHandler.RETRY_INSTANCE)
-            .setDefaultRequestConfig(requestConfig);
+        .setDefaultCookieStore(cookieStore)
+        .setRetryHandler(NoResponseRetryHandler.RETRY_INSTANCE)
+        .setDefaultRequestConfig(requestConfig);
   }
 
   private static SSLContext setupSslContext() {
     try {
       X509TrustManager trustManager = new TrustManagerBuilder()
-              .addBuiltinCertificates()
-              .addFromResourceDirectory("/certificates")
-              .build();
+          .addBuiltinCertificates()
+          .addFromResourceDirectory("/certificates")
+          .build();
 
       SSLContext context = SSLContext.getInstance("TLS");
       context.init(null, new X509TrustManager[] { trustManager }, null);
@@ -196,7 +196,7 @@ public class HttpClientTools {
 
     private HttpClientConnectionManager createConnectionManager() {
       PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager(createConnectionSocketFactory(),
-              createConnectionFactory());
+          createConnectionFactory());
 
       manager.setMaxTotal(3000);
       manager.setDefaultMaxPerRoute(1500);
@@ -207,12 +207,12 @@ public class HttpClientTools {
     private Registry<ConnectionSocketFactory> createConnectionSocketFactory() {
       HostnameVerifier hostnameVerifier = new DefaultHostnameVerifier(PublicSuffixMatcherLoader.getDefault());
       ConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContextOverride != null ?
-              sslContextOverride : defaultSslContext, hostnameVerifier);
+          sslContextOverride : defaultSslContext, hostnameVerifier);
 
       return RegistryBuilder.<ConnectionSocketFactory>create()
-              .register("http", PlainConnectionSocketFactory.getSocketFactory())
-              .register("https", sslSocketFactory)
-              .build();
+          .register("http", PlainConnectionSocketFactory.getSocketFactory())
+          .register("https", sslSocketFactory)
+          .build();
     }
 
     private static ManagedHttpClientConnectionFactory createConnectionFactory() {
@@ -288,19 +288,21 @@ public class HttpClientTools {
    */
   public static boolean isRetriableNetworkException(Throwable exception) {
     return isConnectionResetException(exception) ||
-            isSocketTimeoutException(exception) ||
-            isIncorrectSslShutdownException(exception) ||
-            isPrematureEndException(exception) ||
-            isRetriableConscryptException(exception) ||
-            isRetriableNestedSslException(exception);
+        isSocketTimeoutException(exception) ||
+        isIncorrectSslShutdownException(exception) ||
+        isPrematureEndException(exception) ||
+        isRetriableConscryptException(exception) ||
+        isRetriableNestedSslException(exception);
   }
 
   private static boolean isConnectionResetException(Throwable exception) {
-    return exception instanceof SocketException && "Connection reset".equals(exception.getMessage());
+    return (exception instanceof SocketException || exception instanceof SSLException)
+        && "Connection reset".equals(exception.getMessage());
   }
 
   private static boolean isSocketTimeoutException(Throwable exception) {
-    return exception instanceof SocketTimeoutException && "Read timed out".equals(exception.getMessage());
+    return (exception instanceof SocketTimeoutException || exception instanceof SSLException)
+        && "Read timed out".equals(exception.getMessage());
   }
 
   private static boolean isIncorrectSslShutdownException(Throwable exception) {
@@ -309,7 +311,7 @@ public class HttpClientTools {
 
   private static boolean isPrematureEndException(Throwable exception) {
     return exception instanceof ConnectionClosedException && exception.getMessage() != null &&
-            exception.getMessage().startsWith("Premature end of Content-Length");
+        exception.getMessage().startsWith("Premature end of Content-Length");
   }
 
   private static boolean isRetriableConscryptException(Throwable exception) {
@@ -318,8 +320,8 @@ public class HttpClientTools {
 
       if (message != null && message.contains("I/O error during system call")) {
         return message.contains("No error") ||
-                message.contains("Connection reset by peer") ||
-                message.contains("Connection timed out");
+            message.contains("Connection reset by peer") ||
+            message.contains("Connection timed out");
       }
     }
 
@@ -346,7 +348,7 @@ public class HttpClientTools {
         return null;
       } else if (statusCode != HttpStatus.SC_OK) {
         throw new FriendlyException("Server responded with an error.", SUSPICIOUS,
-                new IllegalStateException("Response code from channel info is " + statusCode));
+            new IllegalStateException("Response code from channel info is " + statusCode));
       }
 
       return JsonBrowser.parse(response.getEntity().getContent());
