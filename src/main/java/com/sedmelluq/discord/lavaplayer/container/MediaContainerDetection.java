@@ -5,12 +5,11 @@ import com.sedmelluq.discord.lavaplayer.tools.io.GreedyInputStream;
 import com.sedmelluq.discord.lavaplayer.tools.io.SavedHeadSeekableInputStream;
 import com.sedmelluq.discord.lavaplayer.tools.io.SeekableInputStream;
 import com.sedmelluq.discord.lavaplayer.track.AudioReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.sedmelluq.discord.lavaplayer.container.MediaContainerDetectionResult.unknownFormat;
 import static com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity.SUSPICIOUS;
@@ -69,9 +68,7 @@ public class MediaContainerDetection {
   }
 
   private MediaContainerDetectionResult detectContainer(SeekableInputStream innerStream, boolean matchHints)
-          throws IOException {
-
-    boolean checked = false;
+      throws IOException {
 
     for (MediaContainerProbe probe : containerRegistry.getAll()) {
       if (matchHints == probe.matchesHints(hints)) {
@@ -81,12 +78,10 @@ public class MediaContainerDetection {
         if (result != null) {
           return result;
         }
-
-        checked = true;
       }
     }
 
-    return checked ? unknownFormat() : null;
+    return null;
   }
 
   private static MediaContainerDetectionResult checkContainer(MediaContainerProbe probe, AudioReference reference,

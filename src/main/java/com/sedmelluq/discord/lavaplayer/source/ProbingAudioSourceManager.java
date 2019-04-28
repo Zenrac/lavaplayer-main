@@ -47,7 +47,7 @@ public abstract class ProbingAudioSourceManager implements AudioSourceManager {
 
   protected void encodeTrackFactory(MediaContainerDescriptor factory, DataOutput output) throws IOException {
     String probeInfo = factory.probe.getName() + (factory.parameters != null ? PARAMETERS_SEPARATOR +
-            factory.parameters : "");
+        factory.parameters : "");
 
     output.writeUTF(probeInfo);
   }
