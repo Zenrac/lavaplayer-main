@@ -79,26 +79,29 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
     } else {
       //Use the stream name as the display name (we would require an additional call to the user to get the true display name)
       String displayName = streamName;
-      
+
       //Retrieve the data value list; this will have only one element since we're getting only one stream's information
       List<JsonBrowser> dataList = channelInfo.get("data").values();
-    
+
       //The value list is empty if the stream is offline, even when hosting another channel
       if (dataList.size() == 0){
-          return null;
+        return null;
       }
-    
+
       //The first one has the title of the broadcast
       JsonBrowser channelData = dataList.get(0);
       String status = channelData.get("title").text();
+      final String thumbnail = channelData.get("thumbnail_url").text().replace("-{width}x{height}.jpg", "-1920x1080.jpg");
+
 
       return new TwitchStreamAudioTrack(new AudioTrackInfo(
-          status,
-          displayName,
-          Long.MAX_VALUE,
-          reference.identifier,
-          true,
-          reference.identifier
+              status,
+              displayName,
+              Long.MAX_VALUE,
+              reference.identifier,
+              true,
+              reference.identifier,
+              thumbnail
       ), this);
     }
   }

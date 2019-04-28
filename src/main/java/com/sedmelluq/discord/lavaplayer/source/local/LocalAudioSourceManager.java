@@ -55,11 +55,8 @@ public class LocalAudioSourceManager extends ProbingAudioSourceManager {
 
   private MediaContainerDetectionResult detectContainerForFile(AudioReference reference, File file) {
     try (LocalSeekableInputStream inputStream = new LocalSeekableInputStream(file)) {
-      int lastDotIndex = file.getName().lastIndexOf('.');
-      String fileExtension = lastDotIndex >= 0 ? file.getName().substring(lastDotIndex + 1) : null;
-
       return new MediaContainerDetection(containerRegistry, reference, inputStream,
-          MediaContainerHints.from(null, fileExtension)).detectContainer();
+              MediaContainerHints.from(null, null)).detectContainer();
     } catch (IOException e) {
       throw new FriendlyException("Failed to open file for reading.", SUSPICIOUS, e);
     }

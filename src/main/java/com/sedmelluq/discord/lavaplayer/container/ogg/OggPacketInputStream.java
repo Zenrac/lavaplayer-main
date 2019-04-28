@@ -75,15 +75,8 @@ public class OggPacketInputStream extends InputStream {
       return false;
     }
 
-    if (!initialisePacket()) {
-      return loadNextNonEmptyPage();
-    }
-
+    initialisePacket();
     return true;
-  }
-
-  public boolean isPacketComplete() {
-    return state == State.PACKET_READ;
   }
 
   private boolean readPageHeader() throws IOException {

@@ -60,7 +60,8 @@ public class BeamAudioSourceManager implements AudioSourceManager, HttpConfigura
       return AudioReference.NO_TRACK;
     } else {
       String displayName = channelInfo.get("name").text();
-      String id = getPlayedStreamId(channelInfo);
+      String id = channelInfo.get("id").text();
+      String thumbnailUrl = channelInfo.get("thumbnail").get("url").text();
 
       if (displayName == null || id == null) {
         throw new IllegalStateException("Expected id and name fields from Beam channel info.");
@@ -72,7 +73,8 @@ public class BeamAudioSourceManager implements AudioSourceManager, HttpConfigura
           Long.MAX_VALUE,
           id + "|" + streamName + "|" + reference.identifier,
           true,
-          "https://beam.pro/" + streamName
+          "https://beam.pro/" + streamName,
+          thumbnailUrl
       ), this);
     }
   }
