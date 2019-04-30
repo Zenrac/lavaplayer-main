@@ -5,7 +5,7 @@ https://github.com/sedmelluq/lavaplayer
 
 It essentially only contains the main package of lavaplayer.
 
-[![](https://jitpack.io/v/Zenrac/lavaplayer-main.svg)](https://jitpack.io/#GigaFyde/lavaplayer-main)
+[![](https://jitpack.io/v/Zenrac/lavaplayer-main.svg)](https://jitpack.io/#Zenrac/lavaplayer-main)
 
 # Changes-made/included
 Repo is up to date as of 27/10/2018 with the only change being
