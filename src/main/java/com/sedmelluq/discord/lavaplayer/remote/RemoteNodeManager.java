@@ -11,8 +11,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.InternalAudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioTrackExecutor;
 
-import com.sedmelluq.lava.common.tools.DaemonThreadFactory;
-import com.sedmelluq.lava.common.tools.ExecutorTools;
+import com.sedmelluq.discord.lavaplayer.tools.DaemonThreadFactory;
+import com.sedmelluq.discord.lavaplayer.tools.ExecutorTools;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
