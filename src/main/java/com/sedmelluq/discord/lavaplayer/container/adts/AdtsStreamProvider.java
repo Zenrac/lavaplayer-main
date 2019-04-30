@@ -69,7 +69,7 @@ public class AdtsStreamProvider {
         configureProcessing(header);
 
         packetBoundedStream.resetLimit(header.payloadLength);
-        directBufferBroker.consumeNext(packetBoundedStream, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        directBufferBroker.consume(true, packetBoundedStream);
 
         ByteBuffer buffer = directBufferBroker.getBuffer();
 

@@ -1,9 +1,7 @@
-package com.sedmelluq.discord.lavaplayer.container.ogg.flac;
+package com.sedmelluq.discord.lavaplayer.container.ogg;
 
 import com.sedmelluq.discord.lavaplayer.container.flac.FlacTrackInfo;
 import com.sedmelluq.discord.lavaplayer.container.flac.frame.FlacFrameReader;
-import com.sedmelluq.discord.lavaplayer.container.ogg.OggPacketInputStream;
-import com.sedmelluq.discord.lavaplayer.container.ogg.OggTrackHandler;
 import com.sedmelluq.discord.lavaplayer.filter.AudioPipeline;
 import com.sedmelluq.discord.lavaplayer.filter.AudioPipelineFactory;
 import com.sedmelluq.discord.lavaplayer.filter.PcmFormat;
@@ -15,7 +13,7 @@ import java.io.IOException;
 /**
  * OGG stream handler for FLAC codec.
  */
-public class OggFlacTrackHandler implements OggTrackHandler {
+public class OggFlacTrackProvider implements OggTrackProvider {
   private final FlacTrackInfo info;
   private final OggPacketInputStream packetInputStream;
   private final BitStreamReader bitStreamReader;
@@ -28,7 +26,7 @@ public class OggFlacTrackHandler implements OggTrackHandler {
    * @param info FLAC track info
    * @param packetInputStream OGG packet input stream
    */
-  public OggFlacTrackHandler(FlacTrackInfo info, OggPacketInputStream packetInputStream) {
+  public OggFlacTrackProvider(FlacTrackInfo info, OggPacketInputStream packetInputStream) {
     this.info = info;
     this.packetInputStream = packetInputStream;
     this.bitStreamReader = new BitStreamReader(packetInputStream);
@@ -43,9 +41,23 @@ public class OggFlacTrackHandler implements OggTrackHandler {
   }
 
   @Override
-  public void initialise(AudioProcessingContext context) {
+  public void initialise(AudioProcessingContext context) throws IOException {
     downstream = AudioPipelineFactory.create(context,
         new PcmFormat(info.stream.channelCount, info.stream.sampleRate));
+  }
+
+  @Override
+  public OggMetadata getMetadata() {
+    return new OggMetadata(info.tags);
+  }
+
+  @Override
+  public OggStreamSizeInfo seekForSizeInfo() throws IOException {
+    if (info.stream.sampleCount > 0) {
+      return new OggStreamSizeInfo(0, info.stream.sampleCount, 0, 0, info.stream.sampleRate);
+    } else {
+      return packetInputStream.seekForSizeInfo(info.stream.sampleRate);
+    }
   }
 
   @Override

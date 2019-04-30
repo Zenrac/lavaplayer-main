@@ -60,7 +60,7 @@ public class BeamAudioSourceManager implements AudioSourceManager, HttpConfigura
       return AudioReference.NO_TRACK;
     } else {
       String displayName = channelInfo.get("name").text();
-      String id = getPlayedStreamId(channelInfo);
+      String id = channelInfo.get("id").text();
       String thumbnailUrl = channelInfo.get("thumbnail").get("url").text();
 
       if (displayName == null || id == null) {

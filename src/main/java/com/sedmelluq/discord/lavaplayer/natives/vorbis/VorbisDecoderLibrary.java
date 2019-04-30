@@ -18,8 +18,9 @@ class VorbisDecoderLibrary {
 
   native void destroy(long instance);
 
-  native boolean initialise(long instance, ByteBuffer infoBuffer, int infoOffset, int infoLength,
-                            ByteBuffer setupBuffer, int setupOffset, int setupLength);
+  native int processHeader(long instance, ByteBuffer directBuffer, int offset, int length, boolean isBeginning);
+
+  native boolean initialise(long instance);
 
   native int getChannelCount(long instance);
 
