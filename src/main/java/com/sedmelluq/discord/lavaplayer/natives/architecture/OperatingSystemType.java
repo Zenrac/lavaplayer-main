@@ -1,4 +1,4 @@
-package com.sedmelluq.lava.common.natives.architecture;
+package com.sedmelluq.discord.lavaplayer.natives.architecture;
 
 public interface OperatingSystemType {
   /**
