@@ -85,7 +85,7 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
 
       //The value list is empty if the stream is offline, even when hosting another channel
       if (dataList.size() == 0){
-        return null;
+          return null;
       }
 
       //The first one has the title of the broadcast
@@ -93,15 +93,14 @@ public class TwitchStreamAudioSourceManager implements AudioSourceManager, HttpC
       String status = channelData.get("title").text();
       final String thumbnail = channelData.get("thumbnail_url").text().replace("-{width}x{height}.jpg", "-1920x1080.jpg");
 
-
       return new TwitchStreamAudioTrack(new AudioTrackInfo(
-              status,
-              displayName,
-              Long.MAX_VALUE,
-              reference.identifier,
-              true,
-              reference.identifier,
-              thumbnail
+          status,
+          displayName,
+          Long.MAX_VALUE,
+          reference.identifier,
+          true,
+          reference.identifier,
+          thumbnail
       ), this);
     }
   }

@@ -56,6 +56,9 @@ public class AllocatingAudioFrameBuffer extends AbstractAudioFrameBuffer {
 
     if (frame == null) {
       return fetchPendingTerminator();
+    } else if (frame.isTerminator()) {
+      fetchPendingTerminator();
+      return frame;
     }
 
     return filterFrame(frame);
@@ -73,12 +76,15 @@ public class AllocatingAudioFrameBuffer extends AbstractAudioFrameBuffer {
 
       if (timeout > 0) {
         frame = audioFrames.poll(timeout, unit);
-        terminator = fetchPendingTerminator();
 
-        if (terminator != null) {
-          return terminator;
+        if (frame == null || frame.isTerminator()) {
+          terminator = fetchPendingTerminator();
+          return terminator != null ? terminator : frame;
         }
       }
+    } else if (frame.isTerminator()) {
+      fetchPendingTerminator();
+      return frame;
     }
 
     return filterFrame(frame);
@@ -97,7 +103,7 @@ public class AllocatingAudioFrameBuffer extends AbstractAudioFrameBuffer {
   }
 
   private boolean passToMutable(AudioFrame frame, MutableAudioFrame targetFrame) {
-    if (targetFrame != null) {
+    if (targetFrame != null && frame != null) {
       if (frame.isTerminator()) {
         targetFrame.setTerminator(true);
       } else {
@@ -193,5 +199,10 @@ public class AllocatingAudioFrameBuffer extends AbstractAudioFrameBuffer {
     }
 
     return frame;
+  }
+
+  @Override
+  protected void signalWaiters() {
+    audioFrames.offer(TerminatorAudioFrame.INSTANCE);
   }
 }

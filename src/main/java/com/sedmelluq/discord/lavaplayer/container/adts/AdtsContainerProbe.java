@@ -29,7 +29,7 @@ public class AdtsContainerProbe implements MediaContainerProbe {
 
   @Override
   public boolean matchesHints(MediaContainerHints hints) {
-    return false;
+    return "aac".equalsIgnoreCase(hints.fileExtension);
   }
 
   @Override

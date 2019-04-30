@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
  */
 public class MediaContainerDetectionResult {
   private static final MediaContainerDetectionResult UNKNOWN_FORMAT =
-          new MediaContainerDetectionResult(null, null, null, null, null);
+      new MediaContainerDetectionResult(null, null, null, null, null);
 
   private final AudioTrackInfo trackInfo;
   private final MediaContainerProbe containerProbe;
@@ -17,7 +17,7 @@ public class MediaContainerDetectionResult {
   private final String unsupportedReason;
 
   private MediaContainerDetectionResult(AudioTrackInfo trackInfo, MediaContainerProbe containerProbe,
-                                        String probeSettings, AudioReference reference, String unsupportedReason) {
+                                       String probeSettings, AudioReference reference, String unsupportedReason) {
 
     this.trackInfo = trackInfo;
     this.containerProbe = containerProbe;
@@ -61,7 +61,7 @@ public class MediaContainerDetectionResult {
    * @param trackInfo Track info for the file
    */
   public static MediaContainerDetectionResult supportedFormat(MediaContainerProbe probe, String settings,
-                                                              AudioTrackInfo trackInfo) {
+                                                        AudioTrackInfo trackInfo) {
 
     return new MediaContainerDetectionResult(trackInfo, probe, settings, null, null);
   }

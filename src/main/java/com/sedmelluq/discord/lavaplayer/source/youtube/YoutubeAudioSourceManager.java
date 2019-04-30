@@ -366,8 +366,6 @@ public class YoutubeAudioSourceManager implements AudioSourceManager, HttpConfig
       return null;
     }
 
-    // In case main page does not give player configuration, but info page indicates an OK result, it is probably an
-    // age-restricted video for which the complete track info can be combined from the embed page and the info page.
     return getTrackInfoFromEmbedPage(httpInterface, videoId);
   }
 

@@ -56,10 +56,10 @@ public class HttpAudioSourceManager extends ProbingAudioSourceManager implements
     super(containerRegistry);
 
     httpInterfaceManager = new ThreadLocalHttpInterfaceManager(
-            HttpClientTools
-                    .createSharedCookiesHttpBuilder()
-                    .setRedirectStrategy(new HttpClientTools.NoRedirectsStrategy()),
-            HttpClientTools.DEFAULT_REQUEST_CONFIG
+        HttpClientTools
+            .createSharedCookiesHttpBuilder()
+            .setRedirectStrategy(new HttpClientTools.NoRedirectsStrategy()),
+        HttpClientTools.DEFAULT_REQUEST_CONFIG
     );
   }
 
