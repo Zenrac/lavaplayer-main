@@ -61,10 +61,10 @@ public class MpegContainerProbe implements MediaContainerProbe {
     }
 
     AudioTrackInfo trackInfo = AudioTrackInfoBuilder.create(reference, inputStream)
-            .setTitle(file.getTextMetadata("Title"))
-            .setAuthor(file.getTextMetadata("Artist"))
-            .setLength(fileReader.getDuration())
-            .build();
+        .setTitle(file.getTextMetadata("Title"))
+        .setAuthor(file.getTextMetadata("Artist"))
+        .setLength(fileReader.getDuration())
+        .build();
 
     return supportedFormat(this, null, trackInfo);
   }

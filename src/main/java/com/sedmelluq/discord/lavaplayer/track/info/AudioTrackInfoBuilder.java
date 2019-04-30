@@ -88,10 +88,10 @@ public class AudioTrackInfoBuilder implements AudioTrackInfoProvider {
     }
 
     return setTitle(provider.getTitle())
-            .setAuthor(provider.getAuthor())
-            .setLength(provider.getLength())
-            .setIdentifier(provider.getIdentifier())
-            .setUri(provider.getUri());
+        .setAuthor(provider.getAuthor())
+        .setLength(provider.getLength())
+        .setIdentifier(provider.getIdentifier())
+        .setUri(provider.getUri());
   }
 
   /**
@@ -101,12 +101,12 @@ public class AudioTrackInfoBuilder implements AudioTrackInfoProvider {
     long finalLength = DataFormatTools.defaultOnNull(length, Long.MAX_VALUE);
 
     return new AudioTrackInfo(
-            title,
-            author,
-            finalLength,
-            identifier,
-            DataFormatTools.defaultOnNull(isStream, finalLength == Long.MAX_VALUE),
-            uri
+        title,
+        author,
+        finalLength,
+        identifier,
+        DataFormatTools.defaultOnNull(isStream, finalLength == Long.MAX_VALUE),
+        uri
     );
   }
 
@@ -119,9 +119,9 @@ public class AudioTrackInfoBuilder implements AudioTrackInfoProvider {
    */
   public static AudioTrackInfoBuilder create(AudioReference reference, SeekableInputStream stream) {
     AudioTrackInfoBuilder builder = new AudioTrackInfoBuilder()
-            .setAuthor(UNKNOWN_ARTIST)
-            .setTitle(UNKNOWN_TITLE)
-            .setLength(Long.MAX_VALUE);
+        .setAuthor(UNKNOWN_ARTIST)
+        .setTitle(UNKNOWN_TITLE)
+        .setLength(Long.MAX_VALUE);
 
     builder.apply(reference);
 
