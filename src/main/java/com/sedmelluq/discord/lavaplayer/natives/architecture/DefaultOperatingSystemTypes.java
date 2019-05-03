@@ -1,4 +1,4 @@
-package com.sedmelluq.lava.common.natives.architecture;
+package com.sedmelluq.discord.lavaplayer.natives.architecture;
 
 public enum DefaultOperatingSystemTypes implements OperatingSystemType {
   LINUX("linux", "lib", ".so"),

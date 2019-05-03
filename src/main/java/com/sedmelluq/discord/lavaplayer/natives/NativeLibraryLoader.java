@@ -1,6 +1,6 @@
-package com.sedmelluq.lava.common.natives;
+package com.sedmelluq.discord.lavaplayer.natives;
 
-import com.sedmelluq.lava.common.natives.architecture.SystemType;
+import com.sedmelluq.discord.lavaplayer.natives.architecture.SystemType;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

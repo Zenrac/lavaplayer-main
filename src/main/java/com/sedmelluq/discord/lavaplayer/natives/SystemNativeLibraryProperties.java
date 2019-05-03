@@ -1,4 +1,4 @@
-package com.sedmelluq.lava.common.natives;
+package com.sedmelluq.discord.lavaplayer.natives;
 
 public class SystemNativeLibraryProperties implements NativeLibraryProperties {
   private final String libraryName;

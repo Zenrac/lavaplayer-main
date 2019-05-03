@@ -1,4 +1,4 @@
-package com.sedmelluq.lava.common.natives;
+package com.sedmelluq.discord.lavaplayer.natives;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
