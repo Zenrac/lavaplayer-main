@@ -10,6 +10,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
+slf4jVersion = '1.7.25'
 
 dependencies {
   compile 'com.sedmelluq:lava-common:1.1.0'
