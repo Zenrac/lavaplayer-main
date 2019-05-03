@@ -1,6 +1,6 @@
 # lavaplayer-main
 
-This repo contains highly stripped-down and modified code from 
+This repo contains highly stripped-down and modified code from
 https://github.com/sedmelluq/lavaplayer
 
 It essentially only contains the main package of lavaplayer.

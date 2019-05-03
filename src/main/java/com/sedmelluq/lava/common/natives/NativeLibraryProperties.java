@@ -1,6 +1,6 @@
-package com.sedmelluq.discord.lavaplayer.natives;
+package com.sedmelluq.lava.common.natives;
 
-import com.sedmelluq.discord.lavaplayer.natives.architecture.SystemType;
+import com.sedmelluq.lava.common.natives.architecture.SystemType;
 
 public interface NativeLibraryProperties {
   /**

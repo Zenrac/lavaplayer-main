@@ -1,4 +1,4 @@
-package com.sedmelluq.discord.lavaplayer.natives.architecture;
+package com.sedmelluq.lava.common.natives.architecture;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package com.sedmelluq.discord.lavaplayer.natives;
 
-import com.sedmelluq.discord.lavaplayer.natives.NativeLibraryLoader;
-import com.sedmelluq.discord.lavaplayer.natives.architecture.DefaultOperatingSystemTypes;
+import com.sedmelluq.lava.common.natives.NativeLibraryLoader;
+import com.sedmelluq.lava.common.natives.architecture.DefaultOperatingSystemTypes;
 
 /**
  * Methods for loading the connector library.
