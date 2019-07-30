@@ -198,8 +198,6 @@ public class OpusPacketRouter {
   }
 
   private void destroyDecoder() {
-    opusDecoder.close();
-
     if (opusDecoder != null) {
       opusDecoder.close();
       opusDecoder = null;
