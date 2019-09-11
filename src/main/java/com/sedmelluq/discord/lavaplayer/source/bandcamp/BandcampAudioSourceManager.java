@@ -26,7 +26,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -108,7 +107,7 @@ public class BandcampAudioSourceManager implements AudioSourceManager, HttpConfi
         bandUrl + trackInfo.get("title_link").text(),
         false,
         trackPageUrl,
-        Collections.singletonMap("artworkUrl", artworkUrl)
+        artworkUrl
     ), this);
   }
 
