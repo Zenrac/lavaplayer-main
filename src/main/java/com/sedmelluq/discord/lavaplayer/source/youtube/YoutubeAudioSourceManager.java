@@ -570,12 +570,15 @@ public class YoutubeAudioSourceManager implements AudioSourceManager, HttpConfig
    * @return An audio track instance.
    */
   public YoutubeAudioTrack buildTrackObject(String videoId, String title, String uploader, boolean isStream, long duration) {
-    return new YoutubeAudioTrack(new AudioTrackInfo(title, uploader, duration, videoId, isStream, getWatchUrl(videoId),
-            String.format("https://img.youtube.com/vi/%s/0.jpg", videoId)), this);
+    return new YoutubeAudioTrack(new AudioTrackInfo(title, uploader, duration, videoId, isStream, getWatchUrl(videoId), getArtworkUrl(videoId)), this);
   }
 
   private static String getWatchUrl(String videoId) {
     return "https://www.youtube.com/watch?v=" + videoId;
+  }
+
+  private static String getArtworkUrl(String videoId) {
+    return String.format("https://img.youtube.com/vi/%s/0.jpg", videoId);
   }
 
   private static UrlInfo getUrlInfo(String url, boolean retryValidPart) {
