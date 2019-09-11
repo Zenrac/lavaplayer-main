@@ -218,22 +218,14 @@ public class YoutubeAudioTrack extends DelegatedAudioTrack {
             ? decodeUrlEncodedItems(cipher, true)
             : Collections.emptyMap();
 
-        try {
-          JsonBrowser contentLength = formatJson.safeGet("contentLength");
-
-          if (contentLength == null) continue;
-
-          tracks.add(new YoutubeTrackFormat(
-                  ContentType.parse(formatJson.safeGet("mimeType").text()),
-                  formatJson.safeGet("bitrate").as(Long.class),
-                  contentLength.as(Long.class),
-                  cipherInfo.getOrDefault("url", formatJson.get("url").text()),
-                  cipherInfo.get("s"),
-                  cipherInfo.getOrDefault("sp", DEFAULT_SIGNATURE_KEY)
-          ));
-        } catch(RuntimeException e) {
-          log.debug("Failed to parse format {}", formatJson, e);
-        }
+        tracks.add(new YoutubeTrackFormat(
+            ContentType.parse(formatJson.safeGet("mimeType").text()),
+            formatJson.safeGet("bitrate").as(Long.class),
+            formatJson.safeGet("contentLength").as(Long.class),
+            cipherInfo.getOrDefault("url", formatJson.get("url").text()),
+            cipherInfo.get("s"),
+            cipherInfo.getOrDefault("sp", DEFAULT_SIGNATURE_KEY)
+        ));
       }
     }
 
