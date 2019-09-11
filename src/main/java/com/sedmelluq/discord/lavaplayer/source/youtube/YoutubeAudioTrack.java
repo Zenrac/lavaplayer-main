@@ -179,41 +179,30 @@ public class YoutubeAudioTrack extends DelegatedAudioTrack {
 
   private List<YoutubeTrackFormat> loadTrackFormatsFromFormatStreamMap(String adaptiveFormats) throws Exception {
     List<YoutubeTrackFormat> tracks = new ArrayList<>();
-    boolean anyFailures = false;
 
     for (String formatString : adaptiveFormats.split(",")) {
-      try {
-        Map<String, String> format = decodeUrlEncodedItems(formatString, false);
-        String url = format.get("url");
+      Map<String, String> format = decodeUrlEncodedItems(formatString, false);
+      String url = format.get("url");
 
-        if (url == null) {
-          continue;
-        }
+      if (url == null) {
+        continue;
+      }
 
-        String contentLength = DataFormatTools.extractBetween(url, "clen=", "&");
+      String contentLength = DataFormatTools.extractBetween(url, "clen=", "&");
 
-        if (contentLength == null) {
-          log.debug("Could not find content length from URL {}, skipping format", url);
-          continue;
-        }
+      if (contentLength == null) {
+        log.debug("Could not find content length from URL {}, skipping format", url);
+        continue;
+      }
 
-        tracks.add(new YoutubeTrackFormat(
-            ContentType.parse(format.get("type")),
-            qualityToBitrateValue(format.get("quality")),
-            Long.parseLong(contentLength),
-            url,
-            format.get("s"),
-            format.getOrDefault("sp", DEFAULT_SIGNATURE_KEY)
-        ));
-      } catch (RuntimeException e) {
-        anyFailures = true;
-        log.debug("Failed to parse format {}, skipping.", formatString, e);
-    }
-  }
-
-    if (tracks.isEmpty() && anyFailures) {
-      log.warn("In adaptive format map {}, all formats either failed to load or were skipped due to missing fields",
-          adaptiveFormats);
+      tracks.add(new YoutubeTrackFormat(
+          ContentType.parse(format.get("type")),
+          qualityToBitrateValue(format.get("quality")),
+          Long.parseLong(contentLength),
+          url,
+          format.get("s"),
+          format.getOrDefault("sp", DEFAULT_SIGNATURE_KEY)
+      ));
     }
 
     return tracks;
@@ -221,7 +210,6 @@ public class YoutubeAudioTrack extends DelegatedAudioTrack {
 
   private List<YoutubeTrackFormat> loadTrackFormatsFromStreamingData(JsonBrowser formats) {
     List<YoutubeTrackFormat> tracks = new ArrayList<>();
-    boolean anyFailures = false;
 
     if (!formats.isNull() && formats.isList()) {
       for (JsonBrowser formatJson : formats.values()) {
@@ -233,10 +221,7 @@ public class YoutubeAudioTrack extends DelegatedAudioTrack {
         try {
           JsonBrowser contentLength = formatJson.safeGet("contentLength");
 
-          if (contentLength.isNull()) {
-            log.debug("Could not find content length from streamingData format {}, skipping", formatJson.format());
-            continue;
-          }
+          if (contentLength == null) continue;
 
           tracks.add(new YoutubeTrackFormat(
                   ContentType.parse(formatJson.safeGet("mimeType").text()),
@@ -246,16 +231,10 @@ public class YoutubeAudioTrack extends DelegatedAudioTrack {
                   cipherInfo.get("s"),
                   cipherInfo.getOrDefault("sp", DEFAULT_SIGNATURE_KEY)
           ));
-        } catch (RuntimeException e) {
-          anyFailures = true;
-          log.debug("Failed to parse format {}, skipping", formatJson, e);
+        } catch(RuntimeException e) {
+          log.debug("Failed to parse format {}", formatJson, e);
         }
       }
-    }
-
-    if (tracks.isEmpty() && anyFailures) {
-      log.warn("In streamingData adaptive formats {}, all formats either failed to load or were skipped due to missing " +
-          "fields", formats.format());
     }
 
     return tracks;
