@@ -579,6 +579,10 @@ public class YoutubeAudioSourceManager implements AudioSourceManager, HttpConfig
     return "https://www.youtube.com/watch?v=" + videoId;
   }
 
+  private static String getArtworkUrl(String videoId) {
+    return String.format("https://img.youtube.com/vi/%s/0.jpg", videoId);
+  }
+
   private static UrlInfo getUrlInfo(String url, boolean retryValidPart) {
     try {
       if (!url.startsWith("http://") && !url.startsWith("https://")) {
