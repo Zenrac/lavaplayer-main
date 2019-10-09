@@ -402,7 +402,7 @@ public class RemoteNodeProcessor implements RemoteNode, Runnable {
 
     HttpClientBuilder builder = HttpClientTools.createSharedCookiesHttpBuilder();
     builder.setDefaultRequestConfig(requestConfig);
-    return new SimpleHttpInterfaceManager(builder, requestConfig);
+    return new SimpleHttpInterfaceManager(builder, requestConfig, null);
   }
 
   /**
@@ -478,7 +478,7 @@ public class RemoteNodeProcessor implements RemoteNode, Runnable {
   public List<Tick> getLastTicks(boolean reset) {
     synchronized (tickHistory) {
       List<Tick> result = new ArrayList<>(tickHistory);
-      
+
       if (reset) {
         tickHistory.clear();
       }
