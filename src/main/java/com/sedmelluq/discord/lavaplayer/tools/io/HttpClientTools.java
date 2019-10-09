@@ -105,7 +105,8 @@ public class HttpClientTools {
    * @return HTTP interface manager with thread-local context, ignores cookies
    */
   public static HttpInterfaceManager createCookielessThreadLocalManager() {
-    return new ThreadLocalHttpInterfaceManager(createHttpBuilder(NO_COOKIES_REQUEST_CONFIG), NO_COOKIES_REQUEST_CONFIG);
+    return new ThreadLocalHttpInterfaceManager(createHttpBuilder(NO_COOKIES_REQUEST_CONFIG), NO_COOKIES_REQUEST_CONFIG,
+        null);
   }
 
   private static HttpClientBuilder createHttpBuilder(RequestConfig requestConfig) {
